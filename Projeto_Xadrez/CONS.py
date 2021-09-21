@@ -1,0 +1,27 @@
+PECAS_B = ["PE_B", "TO_B", "CA_B", "BI_B", "RA_B", "RE_B"]
+PECAS_P = ["PE_P", "TO_P", "CA_P", "BI_P", "RA_P", "RE_P"]
+
+LIMITE_CO_D = 7  # Extremidades à direita e à cima do tabuleiro
+LIMITE_CO_E = 0  # Extemidades à esquerda e à baixo do tabuleiro
+DIVISOR = 2  # Divisor de jogadas
+LINHA_PEAO_2 = 2
+LINHA_PEAO_3 = 3
+LINHA_PEAO_5 = 5
+LINHA_PEAO_4 = 4
+INDICE_TORRE_E = 0
+INDICE_TORRE_D = 7
+INDICE_CAVALO_E = 1
+INDICE_CAVALO_D = 6
+INDICE_BISPO_E = 2
+INDICE_BISPO_D = 5
+INDICE_RAINHA = 3
+INDICE_REI = 4
+INDICE0 = 0
+INDICE7 = 7
+INDICE2 = 2
+INDICE3 = 3
+INDICE1 = 1
+QTD_L = 8
+QTD_C = 8
+PONTO_P = 1
+P2_PEAO = 6
