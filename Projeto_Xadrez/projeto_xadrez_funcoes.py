@@ -244,7 +244,7 @@ def movBispo(tabuleiro, co, li, peca):
                 break
             if casa not in aliados:
                 lista_m.append(tabuleiro[d][co_d_b])
-                if casa in oponente or co_d_b == LIMITE_CO_E:
+                if casa in oponente or co_d_b == LIMITE_CO_D:
                     break
     return lista_m
 
