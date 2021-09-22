@@ -44,7 +44,7 @@ while True:
             li, co = map(int, input("EM QUE CASA ESTÁ LOCALIZADA A PEÇA QUE VOCÊ DESEJA MOVER? ").split(","))
             print()
             peca = tabuleiro[li][co]
-            if peca[INDICE3] == "B":
+            if peca in PECAS_B:
                 lista_s = movimentos(tabuleiro, co, li, peca)
                 if li > INDICE7 or co > INDICE7 or li < INDICE0 or co < INDICE0:
                     print((colored("ESSA CASA NÃO ESTA CONTIDA NO TABULEIRO", "red")))
@@ -67,15 +67,17 @@ while True:
                     print()
                 else:
                     print("ESSA PEÇA NÃO FOI ENCONTRADA")
+            elif peca in PECAS_P:
+                print(colored("ESSA PEÇA É DO SEU ADVERSÁRIO. ESCOLHA UMA ALIADA.", "red"))
             else:
-                print("ESSA PEÇA É DO SEU ADVERSÁRIO, ESCOLHA UMA ALIADA.")
+                print(colored("NÃO HÁ NENHUMA PEÇA NESSA CASA. SELECIONA OUTRA.", "red"))
     else:
         print("VEZ DO(A) JOGADOR(A) {}\n".format(nome_jogador_p))
         while True:
             li, co = map(int, input("EM QUE CASA ESTÁ LOCALIZADA A PEÇA QUE VOCÊ DESEJA MOVER? ").split(","))
             print()
             peca = tabuleiro[li][co]
-            if peca[INDICE3] == "P":
+            if peca in PECAS_P:
                 lista_s = movimentos(tabuleiro, co, li, peca)
                 if li > INDICE7 or co > INDICE7 or li < INDICE0 or co < INDICE0:
                     print((colored("ESSA CASA NÃO ESTA CONTIDA NO TABULEIRO", "red")))
@@ -98,6 +100,8 @@ while True:
                     print()
                 else:
                     print("ESSA PEÇA NÃO FOI ENCONTRADA")
+            elif peca in PECAS_B:
+                print(colored("ESSA PEÇA É DO SEU ADVERSÁRIO. ESCOLHA UMA ALIADA.", "red"))
             else:
-                print("ESSA PEÇA É DO SEU ADVERSÁRIO. ESCOLHA UMA ALIADA.")
+                print(colored("NÃO HÁ NENHUMA PEÇA NESSA CASA. SELECIONA OUTRA.", "red"))
     cont += 1  # Adiciona '+ 1' ao contador da quantidade de jogadas
