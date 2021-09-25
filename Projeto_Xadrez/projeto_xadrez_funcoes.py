@@ -14,9 +14,9 @@ def montar_tabuleiro():
     :return: Um tauleiro como matriz
     """
     tabuleiro = []
-    for x in range(INDICE0, INDICE7+INDICE1):  # indice da linha
+    for x in range(INDICE0, INDICE7 + INDICE1):  # indice da linha
         linha = []
-        for y in range(INDICE0, INDICE7+INDICE1):  # indice da coluna
+        for y in range(INDICE0, INDICE7 + INDICE1):  # indice da coluna
             linha.append("{},{}".format(x, y))
         tabuleiro.append(linha)
     return tabuleiro
@@ -115,9 +115,9 @@ def movPeao(tabuleiro, co, li, peca):
             lista_m.append(tabuleiro[LINHA_PEAO_3][co])
         elif tabuleiro[li + 1][co] not in PECAS_P and tabuleiro[li + 1][co] not in PECAS_B:
             lista_m.append(tabuleiro[li + 1][co])
-        if tabuleiro[li + 1][co + 1] in PECAS_P:
+        if co != 7 and tabuleiro[li + 1][co + 1] in PECAS_P:
             lista_m.append(tabuleiro[li + 1][co + 1])
-        elif tabuleiro[li + 1][co - 1] in PECAS_P:
+        if co != 0 and tabuleiro[li + 1][co - 1] in PECAS_P:
             lista_m.append(tabuleiro[li + 1][co - 1])
     if peca == "PE_P":
         if li == 6:
@@ -125,9 +125,9 @@ def movPeao(tabuleiro, co, li, peca):
             lista_m.append(tabuleiro[LINHA_PEAO_5][co])
         elif tabuleiro[li - 1][co] not in PECAS_P and tabuleiro[li - 1][co] not in PECAS_B:
             lista_m.append(tabuleiro[li - 1][co])
-        if tabuleiro[li - 1][co + 1] in PECAS_B:
+        if co != 7 and tabuleiro[li - 1][co + 1] in PECAS_B:
             lista_m.append(tabuleiro[li - 1][co + 1])
-        elif tabuleiro[li - 1][co - 1] in PECAS_B:
+        if co != 0 and tabuleiro[li - 1][co - 1] in PECAS_B:
             lista_m.append(tabuleiro[li - 1][co - 1])
     return lista_m
 
@@ -150,7 +150,7 @@ def movTorre(tabuleiro, co, li, peca):
     elif peca[INDICE3] == "P":
         aliados = PECAS_P
         oponente = PECAS_B
-    for a in range(co+1, INDICE7+1):
+    for a in range(co + 1, INDICE7 + 1):
         casa = tabuleiro[li][a]
         if casa in aliados:
             break
@@ -158,7 +158,7 @@ def movTorre(tabuleiro, co, li, peca):
             lista_m.append(casa)
             if casa in oponente:
                 break
-    for b in range(co-1, INDICE0-1, -1):
+    for b in range(co - 1, INDICE0 - 1, -1):
         casa = tabuleiro[li][b]
         if casa in aliados:
             break
@@ -166,7 +166,7 @@ def movTorre(tabuleiro, co, li, peca):
             lista_m.append(casa)
             if casa in oponente:
                 break
-    for c in range(li+1, INDICE7+1):
+    for c in range(li + 1, INDICE7 + 1):
         casa = tabuleiro[c][co]
         if casa in aliados:
             break
@@ -174,7 +174,7 @@ def movTorre(tabuleiro, co, li, peca):
             lista_m.append(casa)
             if casa in oponente:
                 break
-    for d in range(li-1, INDICE0-1, -1):
+    for d in range(li - 1, INDICE0 - 1, -1):
         casa = tabuleiro[d][co]
         if casa in aliados:
             break
@@ -368,3 +368,36 @@ def moverPecas(tabuleiro, peca, li_m, co_m, li, co):
     tabuleiro[li_m][co_m] = peca
     tabuleiro[li][co] = "{},{}".format(li, co)
     return tabuleiro
+
+
+def roqueCasV(tabuleiro, li, co, la):
+    mensagem = True
+    if la == 0:
+        for a in range(co - 1, 0, -1):
+            casa = tabuleiro[li][a]
+            if casa in PECAS_P or casa in PECAS_P:
+                break
+            elif a == 1:
+                return mensagem
+    elif la == 7:
+        for a in range(co + 1, 7):
+            casa = tabuleiro[li][a]
+            if casa in PECAS_P or casa in PECAS_P:
+                break
+            elif a == 6:
+                return mensagem
+
+
+def roqueMov(tabuleiro, li, co, la, re, to):
+    if la == 0:
+        tabuleiro[li][co - 2] = re
+        tabuleiro[li][co - 1] = to
+        tabuleiro[li][co] = "{},{}".format(li,co)
+        tabuleiro[li][la] = "{},{}".format(li, la)
+    elif la == 7:
+        tabuleiro[li][co + 2] = re
+        tabuleiro[li][co + 1] = to
+        tabuleiro[li][co] = "{},{}".format(li, co)
+        tabuleiro[li][la] = "{},{}".format(li, la)
+    return tabuleiro
+
