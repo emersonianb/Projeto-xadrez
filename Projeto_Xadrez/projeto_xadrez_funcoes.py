@@ -209,7 +209,9 @@ def movBispo(tabuleiro, co, li, peca):
     co_e_b = co  # Diagonal esquerda + baixo
     co_d_b = co  # Diagonal direita + baixo
     if li != INDICE0:  # Essa condição é utilizada caso o bispo não esteja na linha 0 do tabuleiro
-        for a in range(li - 1, 0, -1):
+        for a in range(li - 1, -1, -1):
+            if co_e == LIMITE_CO_D:
+                break
             co_d += 1
             casa = tabuleiro[a][co_d]
             if casa in aliados:
@@ -218,33 +220,39 @@ def movBispo(tabuleiro, co, li, peca):
                 lista_m.append(tabuleiro[a][co_d])
                 if casa in oponente or co_d == LIMITE_CO_D:
                     break
-        for b in range(li - 1, 0, -1):
+        for b in range(li - 1, -1, -1):
+            if co_e == LIMITE_CO_E:
+                break
             co_e -= 1
             casa = tabuleiro[b][co_e]
             if casa in aliados:
                 break
             if casa not in aliados:
                 lista_m.append(tabuleiro[b][co_e])
-                if casa in oponente or co_e == LIMITE_CO_E:
+                if casa in oponente:
                     break
     if li != INDICE7:  # Essa condição é utilizada caso o bispo não esteja na linha 7 do tabuleiro
-        for c in range(li + 1, 7):
+        for c in range(li + 1, 7+1):
+            if co_e_b == LIMITE_CO_E:
+                break
             co_e_b -= 1
             casa = tabuleiro[c][co_e_b]
             if casa in aliados:
                 break
             if casa not in aliados:
                 lista_m.append(tabuleiro[c][co_e_b])
-                if casa in oponente or co_e_b == LIMITE_CO_E:
+                if casa in oponente:
                     break
-        for d in range(li + 1, 7):
+        for d in range(li + 1, 7+1):
+            if co_d_b == LIMITE_CO_D:
+                break
             co_d_b += 1
             casa = tabuleiro[d][co_d_b]
             if casa in aliados:
                 break
             if casa not in aliados:
                 lista_m.append(tabuleiro[d][co_d_b])
-                if casa in oponente or co_d_b == LIMITE_CO_D:
+                if casa in oponente:
                     break
     return lista_m
 
@@ -375,14 +383,14 @@ def roqueCasV(tabuleiro, li, co, la):
     if la == 0:
         for a in range(co - 1, 0, -1):
             casa = tabuleiro[li][a]
-            if casa in PECAS_P or casa in PECAS_P:
+            if casa in PECAS_B or casa in PECAS_P:
                 break
             elif a == 1:
                 return mensagem
     elif la == 7:
         for a in range(co + 1, 7):
             casa = tabuleiro[li][a]
-            if casa in PECAS_P or casa in PECAS_P:
+            if casa in PECAS_B or casa in PECAS_P:
                 break
             elif a == 6:
                 return mensagem
@@ -392,7 +400,7 @@ def roqueMov(tabuleiro, li, co, la, re, to):
     if la == 0:
         tabuleiro[li][co - 2] = re
         tabuleiro[li][co - 1] = to
-        tabuleiro[li][co] = "{},{}".format(li,co)
+        tabuleiro[li][co] = "{},{}".format(li, co)
         tabuleiro[li][la] = "{},{}".format(li, la)
     elif la == 7:
         tabuleiro[li][co + 2] = re
@@ -400,4 +408,12 @@ def roqueMov(tabuleiro, li, co, la, re, to):
         tabuleiro[li][co] = "{},{}".format(li, co)
         tabuleiro[li][la] = "{},{}".format(li, la)
     return tabuleiro
+
+
+def indentificaCheque(tabuleiro, li_f, co_f, peca, rei):
+    cheque = False
+    lista = movimentos(tabuleiro, co_f, li_f, peca)
+    if rei in lista:
+        cheque = True
+    return cheque
 
