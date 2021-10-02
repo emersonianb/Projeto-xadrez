@@ -6,6 +6,8 @@ tabuleiro = posiciona_pecas()
 nome_jogador_b = input("NOME DO JOGADOR DAS PEÇAS BRANCAS: ").upper()
 nome_jogador_p = input("NOME DO JOGADOR DAS PEÇAS PRETAS: ").upper()
 
+lista_pec_b = lista_pec_b
+lista_pec_p = lista_pec_p
 peca = ""
 li_m = 0
 co_m = 0
@@ -117,7 +119,20 @@ while True:
                                 print()
                                 print("REI PRETO CAPTURADO! O(A) JOGADOR(A) {} É O(A) VENCEDOR(A)!".format(nome_jogador_b))
                                 exit(0)
-                            if l_m in lista_s:
+                            elif l_m in PECAS_P:
+                                if l_m == "TO_P":
+                                    lista_pec_p.remove(l_m)
+                                elif l_m == "CA_P":
+                                    lista_pec_p.remove(l_m)
+                                elif l_m == "BI_P":
+                                    lista_pec_p.remove(l_m)
+                                elif l_m == "PE_P":
+                                    lista_pec_p.remove(l_m)
+                                elif l_m == "RA_P":
+                                    lista_pec_p.remove(l_m)
+                                tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                                break
+                            elif l_m in lista_s:
                                 if peca == "PE_B" and li_m == INDICE7:
                                     print(colored("SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ", "green"))
                                     print(colored("TO_B, BI_B, CA_B, RA_B", "green"))
@@ -208,6 +223,19 @@ while True:
                                 s = "REI BRANCO CAPTURADO! O(A) JOGADOR(A) {} É O(A) VENCEDOR(A)!".format(nome_jogador_p)
                                 print(colored(s, "blue", attrs=['bold']))
                                 exit(0)
+                            elif l_m in PECAS_B:
+                                if l_m == "TO_B":
+                                    lista_pec_p.remove(l_m)
+                                elif l_m == "CA_B":
+                                    lista_pec_p.remove(l_m)
+                                elif l_m == "BI_B":
+                                    lista_pec_p.remove(l_m)
+                                elif l_m == "PE_B":
+                                    lista_pec_p.remove(l_m)
+                                elif l_m == "RA_B":
+                                    lista_pec_p.remove(l_m)
+                                tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                                break
                             if l_m in lista_s:
                                 if peca == "PE_P" and li_m == INDICE0:
                                     print(colored(
@@ -231,5 +259,20 @@ while True:
                     print(colored("ESSA PEÇA É DO SEU ADVERSÁRIO. ESCOLHA UMA ALIADA.", "red"))
                 else:
                     print(colored("NÃO HÁ NENHUMA PEÇA NESSA CASA. SELECIONA OUTRA.", "red"))
+    if lista_pec_p == ["RE_P"] and lista_pec_b == ["RE_B"]:
+        print("O JOGO TERMINOU EMPATADO!")
+        exit(0)
+    elif lista_pec_p == ["RE_P"] and lista_pec_b == ["CA_B", "RE_B"] or lista_pec_p == ["RE_P", "CA_P"] and lista_pec_b == ["RE_B"]:
+        print("O JOGO TERMINOU EMPATADO!")
+        exit(0)
+    elif lista_pec_p == ["RE_P"] and lista_pec_b == ["BI_B", "RE_B"] or lista_pec_p == ["RE_P", "BI_P"] and lista_pec_b == ["RE_B"]:
+        print("O JOGO TERMINOU EMPATADO!")
+        exit(0)
+    elif lista_pec_p == ["RE_P"] and lista_pec_b == ["CA_B", "CA_B", "RE_B"] or lista_pec_p == ["RE_P", "CA_P", "CA_P"] and lista_pec_b == ["RE_B"]:
+        print("O JOGO TERMINOU EMPATADO!")
+        exit(0)
+    elif lista_pec_p == ["RE_P"] and lista_pec_b == ["TO_B", "RE_B"] or lista_pec_p == ["TO_P", "BI_P"] and lista_pec_b == ["RE_B"]:
+        print("O JOGO TERMINOU EMPATADO!")
+        exit(0)
     cont += 1  # Adiciona '+ 1' ao contador da quantidade de jogadas
 
