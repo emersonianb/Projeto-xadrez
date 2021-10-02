@@ -7,6 +7,8 @@ O módulo de interface com o usuário as utiliza para:
 """
 from CONS import *
 
+lista_pec_b = []
+lista_pec_p = []
 
 def montar_tabuleiro():
     """
@@ -31,6 +33,10 @@ def peoes_lugar(n1, peca):
     lista = []
     for c in range(n1):
         lista.append(("{}".format(peca)))
+        if peca in PECAS_B:
+            lista_pec_b.append(peca)
+        else:
+            lista_pec_p.append(peca)
     return lista
 
 
@@ -74,28 +80,44 @@ def posiciona_pecas():
                 tabuleiro[b] = peoes_lugar(QTD_C, a)
             elif b == INDICE0 and a == "TO_B":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_TORRE_E, INDICE_TORRE_D, a)
+                lista_pec_b.append(a)
+                lista_pec_b.append(a)
             elif b == INDICE0 and a == "CA_B":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_CAVALO_E, INDICE_CAVALO_D, a)
+                lista_pec_b.append(a)
+                lista_pec_b.append(a)
             elif b == INDICE0 and a == "BI_B":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_BISPO_E, INDICE_BISPO_D, a)
+                lista_pec_b.append(a)
+                lista_pec_b.append(a)
             elif b == INDICE0 and a == "RA_B":
                 tabuleiro[b] = rei_rainha_lugar(tabuleiro, b, INDICE_REI, a)
+                lista_pec_b.append(a)
             elif b == INDICE0 and a == "RE_B":
                 tabuleiro[b] = rei_rainha_lugar(tabuleiro, b, INDICE_RAINHA, a)
+                lista_pec_b.append(a)
     for a in PECAS_P:
         for b in range(len(tabuleiro)):
             if b == P2_PEAO and a == "PE_P":
                 tabuleiro[b] = peoes_lugar(QTD_C, a)
             elif b == INDICE7 and a == "TO_P":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_TORRE_E, INDICE_TORRE_D, a)
+                lista_pec_p.append(a)
+                lista_pec_p.append(a)
             elif b == INDICE7 and a == "CA_P":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_CAVALO_E, INDICE_CAVALO_D, a)
+                lista_pec_p.append(a)
+                lista_pec_p.append(a)
             elif b == INDICE7 and a == "BI_P":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_BISPO_E, INDICE_BISPO_D, a)
+                lista_pec_p.append(a)
+                lista_pec_p.append(a)
             elif b == INDICE7 and a == "RE_P":
                 tabuleiro[b] = rei_rainha_lugar(tabuleiro, b, INDICE_REI, a)
+                lista_pec_p.append(a)
             elif b == INDICE7 and a == "RA_P":
                 tabuleiro[b] = rei_rainha_lugar(tabuleiro, b, INDICE_RAINHA, a)
+                lista_pec_p.append(a)
     return tabuleiro
 
 
@@ -416,4 +438,3 @@ def indentificaCheque(tabuleiro, li_f, co_f, peca, rei):
     if rei in lista:
         cheque = True
     return cheque
-
