@@ -25,3 +25,4 @@ QTD_L = 8
 QTD_C = 8
 PONTO_P = 1
 P2_PEAO = 6
+L_1_TAB = "      0  |  1   |  2   |  3   |  4   |  5   |  6   |  7 "
