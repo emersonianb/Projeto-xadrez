@@ -18,10 +18,15 @@ cont_tp_7 = 0
 cont_tp_0 = 0
 cont_rb = 0
 cont_rp = 0
+pos_re_b = "0,3"
+pos_re_p = "7,4"
 while True:
     # Imprime o tabuleiro
+    cont_t = 0
     print()
+    print(colored(L_1_TAB, "yellow", attrs=['bold']))
     for a in tabuleiro:
+        print(colored("{} |".format(cont_t), "yellow", attrs=['bold']), end=" ")
         indice = INDICE0
         for b in a:
             if indice != QTD_C - PONTO_P:
@@ -34,7 +39,7 @@ while True:
                     print("{} |".format(s), end=" ")
                 else:
                     s = (colored(b, "white"))
-                    print("{}  |".format(s), end=" ")
+                    print("{} |".format(s), end=" ")
             else:
                 if b in PECAS_B:
                     s = (colored(b, attrs=['bold']))
@@ -45,6 +50,7 @@ while True:
                 else:
                     s = (colored(b, "white"))
                     print(s)
+        cont_t += 1
     print()
     # Abaixo desse ponto, encontram-se as condicionais que irão definir quem é o jogador da vez
     if cont % DIVISOR == INDICE0:  # Jogadas pares, indica que é a vez do jogador das peças brancas
@@ -53,11 +59,28 @@ while True:
         # selecionar outra peça
         while True:
             if cont > 1:
-                cheque = indentificaCheque(tabuleiro, li_m, co_m, peca, "RE_B")
+                cheque = indentificaCheque(tabuleiro, li_m, co_m, peca, pos_re_b)
                 if cheque:
                     print()
-                    print(colored("SEU REI ESTÁ EM CHEQUE. CUIDADO, MOVA-O!", "red", attrs=['bold']))
+                    print(colored("SEU REI ESTÁ EM XEQUE. CUIDADO, MOVA-O!", "red", attrs=['bold']))
                     print()
+                    while True:
+                        li, co = map(int, input("EM QUE CASA EM QUE O REI ESTÁ LOCALIZADO? ").split(","))
+                        peca = tabuleiro[li][co]
+                        if peca != "RE_B":
+                            print("SEU REI ESTÁ EM XEQUE!")
+                        else:
+                            break
+                    while True:
+                        lista_m = movimentos(tabuleiro, co, li, peca)
+                        print(lista_m)
+                        mov = input("PARA QUAL CASA VOCÊ DESEJA MOVER? ")
+                        pos_re_b = mov
+                        li_m, co_m = map(int, mov.split(","))
+                        if mov in lista_m:
+                            tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                            break
+                    break
             ent = input("EM QUE CASA ESTÁ LOCALIZADA A PEÇA QUE VOCÊ DESEJA MOVER? ").upper()
             if ent == "DESISTIR":
                 m = "O JOGADOR {} DESISTIU, SENDO ASSIM, O JOGADOR {} VENCEU".format(nome_jogador_p, nome_jogador_b)
@@ -66,25 +89,8 @@ while True:
                 exit(0)
             li, co = map(int, ent.split(","))
             peca = tabuleiro[li][co]
-            if peca == "TO_B" or peca == "RE_B" and cont_rb == 0:
-                if peca == "TO_B":
-                    if co == 0:
-                        if cont_tb_0 == 0 and tabuleiro[0][3] == "RE_B":
-                            vazio = roqueCasV(tabuleiro, 0, 3, co)
-                            if vazio:
-                                faz_ro = input("VOCÊ GOSTARIA DE FAZER O ROQUE? ").upper()
-                                if faz_ro == "SIM":
-                                    tabuleiro = roqueMov(tabuleiro, 0, 3, co, "RE_B", "TO_B")
-                                    break
-                    elif co == 7:
-                        if cont_tb_7 == 0 and tabuleiro[0][3] == "RE_B":
-                            vazio = roqueCasV(tabuleiro, 0, 3, co)
-                            if vazio:
-                                faz_ro = input("VOCÊ GOSTARIA DE FAZER O ROQUE? ").upper()
-                                if faz_ro == "SIM":
-                                    tabuleiro = roqueMov(tabuleiro, 0, 3, co, "RE_B", "TO_B")
-                                    break
-                elif peca == "RE_B" and li == 0 and co == 3:
+            if peca == "RE_B" and cont_rb == 0:
+                if peca == "RE_B" and li == 0 and co == 3:
                     to_e = False
                     to_d = False
                     if tabuleiro[0][0] == "TO_B":
@@ -137,7 +143,9 @@ while True:
                         mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ").upper()
                         li_m, co_m = map(int, mov.split(","))
                         l_m = tabuleiro[li_m][co_m]
-                        if l_m == "RE_B":
+                        if peca == "RE_B":
+                            pos_re_b = mov
+                        if l_m == "RE_P":
                             print()
                             print("REI PRETO CAPTURADO! O(A) JOGADOR(A) {} É O(A) VENCEDOR(A)!".format(
                                 nome_jogador_b))
@@ -155,7 +163,7 @@ while True:
                                 lista_pec_p.remove(l_m)
                             tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
                             break
-                        elif l_m in lista_s:
+                        elif mov in lista_s:
                             if peca == "PE_B" and li_m == INDICE7:
                                 print(colored(
                                     "SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ",
@@ -182,10 +190,10 @@ while True:
         print("VEZ DO(A) JOGADOR(A) {}\n".format(nome_jogador_p))
         while True:
             if cont != 0 and cont != 1:
-                cheque = indentificaCheque(tabuleiro, li_m, co_m, peca, "RE_P")
+                cheque = indentificaCheque(tabuleiro, li_m, co_m, peca, pos_re_p)
                 if cheque:
                     print()
-                    print(colored("SEU REI ESTÁ EM CHEQUE. CUIDADO, MOVA-O OU PERDERÁ O JOGO!", "red", attrs=['bold']))
+                    print(colored("SEU REI ESTÁ EM XEQUE. CUIDADO, MOVA-O OU PERDERÁ O JOGO!", "red", attrs=['bold']))
                     print()
             ent = input("EM QUE CASA ESTÁ LOCALIZADA A PEÇA QUE VOCÊ DESEJA MOVER? ").upper()
             if ent == "DESISTIR":
@@ -194,35 +202,18 @@ while True:
                 exit(0)
             li, co = map(int, ent.split(","))
             peca = tabuleiro[li][co]
-            if peca == "TO_P" or peca == "RE_P" and cont_rp == 0:
-                if peca == "TO_P":
-                    if co == 0:
-                        if cont_tp_0 == 0 and tabuleiro[0][3] == "RE_P":
-                            vazio = roqueCasV(tabuleiro, 0, 3, co)
-                            if vazio:
-                                faz_ro = input("VOCÊ GOSTARIA DE FAZER O ROQUE? ").upper()
-                                if faz_ro == "SIM":
-                                    tabuleiro = roqueMov(tabuleiro, li, co, 0, "RE_P", "TO_P")
-                                    break
-                    elif co == 7:
-                        if cont_tp_7 == 0 and tabuleiro[0][3] == "RE_P":
-                            vazio = roqueCasV(tabuleiro, 0, 3, co)
-                            if vazio:
-                                faz_ro = input("VOCÊ GOSTARIA DE FAZER O ROQUE? ").upper()
-                                if faz_ro == "SIM":
-                                    tabuleiro = roqueMov(tabuleiro, li, co, 7, "RE_P", "TO_P")
-                                    break
-                elif peca == "RE_P" and li == 0 and co == 3:
+            if peca == "RE_P" and cont_rp == 0:
+                if peca == "RE_P" and li == 7 and co == 4:
                     to_e = False
                     to_d = False
-                    if tabuleiro[0][0] == "TO_P":
+                    if tabuleiro[7][0] == "TO_P":
                         if cont_tp_0 == 0:
                             vazio = roqueCasV(tabuleiro, li, co, 0)
                             if vazio:
                                 to_e = True
-                    elif tabuleiro[0][7] == "TO_P":
+                    elif tabuleiro[7][7] == "TO_P":
                         if cont_tp_7 == 0:
-                            vazio = roqueCasV(tabuleiro, li, co, 0)
+                            vazio = roqueCasV(tabuleiro, li, co, 7)
                             if vazio:
                                 to_d = True
                     if to_e == True and to_d == True:
@@ -273,18 +264,18 @@ while True:
                             exit(0)
                         elif l_m in PECAS_B:
                             if l_m == "TO_B":
-                                lista_pec_p.remove(l_m)
+                                lista_pec_b.remove(l_m)
                             elif l_m == "CA_B":
-                                lista_pec_p.remove(l_m)
+                                lista_pec_b.remove(l_m)
                             elif l_m == "BI_B":
-                                lista_pec_p.remove(l_m)
+                                lista_pec_b.remove(l_m)
                             elif l_m == "PE_B":
-                                lista_pec_p.remove(l_m)
+                                lista_pec_b.remove(l_m)
                             elif l_m == "RA_B":
-                                lista_pec_p.remove(l_m)
+                                lista_pec_b.remove(l_m)
                             tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
                             break
-                        if l_m in lista_s:
+                        elif mov in lista_s:
                             if peca == "PE_P" and li_m == INDICE0:
                                 print(colored(
                                     "SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ",
