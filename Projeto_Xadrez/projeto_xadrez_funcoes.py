@@ -20,7 +20,7 @@ def montar_tabuleiro():
     for x in range(INDICE0, INDICE7 + INDICE1):  # indice da linha
         linha = []
         for y in range(INDICE0, INDICE7 + INDICE1):  # indice da coluna
-            linha.append("____")
+            linha.append("_")
         tabuleiro.append(linha)
     return tabuleiro
 
@@ -122,6 +122,57 @@ def posiciona_pecas():
     return tabuleiro
 
 
+def tradLet(le):
+    if le == "a":
+        n = 0
+        return n
+    elif le == "b":
+        n = 1
+        return n
+    elif le == "c":
+        n = 2
+        return n
+    elif le == "d":
+        n = 3
+        return n
+    elif le == "e":
+        n = 4
+        return n
+    elif le == "f":
+        n = 5
+        return n
+    elif le == "g":
+        n = 6
+        return n
+    elif le == "h":
+        n = 7
+        return n
+    elif le == 0:
+        l = "a"
+        return l
+    elif le == 1:
+        l = "b"
+        return l
+    elif le == 2:
+        l = "c"
+        return l
+    elif le == 3:
+        l = "d"
+        return l
+    elif le == 4:
+        l = "e"
+        return l
+    elif le == 5:
+        l = "f"
+        return l
+    elif le == 6:
+        l = "g"
+        return l
+    elif le == 7:
+        l = "h"
+        return l
+
+
 def movPeao(tabuleiro, co, li, peca):
     """
     Esta função indentifica quais são as movimentações possiveis do peão
@@ -134,24 +185,35 @@ def movPeao(tabuleiro, co, li, peca):
     lista_m = []
     if peca == "PE_B":
         if li == 1:
-            lista_m.append("{},{}".format(LINHA_PEAO_2, co))
-            lista_m.append("{},{}".format(LINHA_PEAO_3, co))
+            lista_m.append("{}{}".format(LINHA_PEAO_2, co))
+            lista_m.append("{}{}".format(LINHA_PEAO_3, co))
         elif tabuleiro[li + 1][co] not in PECAS_P and tabuleiro[li + 1][co] not in PECAS_B:
-            lista_m.append("{},{}".format(li + 1, co))
+            lista_m.append("{}{}".format(li + 1, co))
         if co != 7 and tabuleiro[li + 1][co + 1] in PECAS_P:
-            lista_m.append("{},{}".format(li + 1, co + 1))
+            lista_m.append("{}{}".format(li + 1, co + 1))
         if co != 0 and tabuleiro[li + 1][co - 1] in PECAS_P:
-            lista_m.append("{},{}".format(li + 1, co - 1))
+            lista_m.append("{}{}".format(li + 1, co - 1))
+
     if peca == "PE_P":
         if li == 6:
-            lista_m.append("{},{}".format(LINHA_PEAO_4, co))
-            lista_m.append("{},{}".format(LINHA_PEAO_5, co))
+            lista_m.append("{}{}".format(LINHA_PEAO_4, co))
+            lista_m.append("{}{}".format(LINHA_PEAO_5, co))
         elif tabuleiro[li - 1][co] not in PECAS_P and tabuleiro[li - 1][co] not in PECAS_B:
-            lista_m.append("{},{}".format(li - 1, co))
+            lista_m.append("{}{}".format(li - 1, co))
         if co != 7 and tabuleiro[li - 1][co + 1] in PECAS_B:
-            lista_m.append("{},{}".format(li - 1, co + 1))
+            lista_m.append("{}{}".format(li - 1, co + 1))
         if co != 0 and tabuleiro[li - 1][co - 1] in PECAS_B:
-            lista_m.append("{},{}".format(li - 1, co - 1))
+            lista_m.append("{}{}".format(li - 1, co - 1))
+    num = len(lista_m)
+    for a in range(num):
+        lista_m[a] = list(lista_m[a])
+        lista_m[a][0] = str(int(lista_m[a][0]) + 1)
+        lista_m[a][1] = tradLet(int(lista_m[a][1]))
+        v = ""
+        for b in lista_m[a]:
+            v += b
+        lista_m[a] = v
+
     return lista_m
 
 
@@ -178,7 +240,7 @@ def movTorre(tabuleiro, co, li, peca):
         if casa in aliados:
             break
         if casa not in aliados:
-            lista_m.append("{},{}".format(li, a))
+            lista_m.append("{}{}".format(li, a))
             if casa in oponente:
                 break
     for b in range(co - 1, INDICE0 - 1, -1):
@@ -186,7 +248,7 @@ def movTorre(tabuleiro, co, li, peca):
         if casa in aliados:
             break
         if casa not in aliados:
-            lista_m.append("{},{}".format(li, b))
+            lista_m.append("{}{}".format(li, b))
             if casa in oponente:
                 break
     for c in range(li + 1, INDICE7 + 1):
@@ -194,7 +256,7 @@ def movTorre(tabuleiro, co, li, peca):
         if casa in aliados:
             break
         if casa not in aliados:
-            lista_m.append("{},{}".format(c, co))
+            lista_m.append("{}{}".format(c, co))
             if casa in oponente:
                 break
     for d in range(li - 1, INDICE0 - 1, -1):
@@ -202,9 +264,18 @@ def movTorre(tabuleiro, co, li, peca):
         if casa in aliados:
             break
         if casa not in aliados:
-            lista_m.append("{},{}".format(d, co))
+            lista_m.append("{}{}".format(d, co))
             if casa in oponente:
                 break
+    num = len(lista_m)
+    for a in range(num):
+        lista_m[a] = list(lista_m[a])
+        lista_m[a][0] = str(int(lista_m[a][0]) + 1)
+        lista_m[a][1] = tradLet(int(lista_m[a][1]))
+        v = ""
+        for b in lista_m[a]:
+            v += b
+        lista_m[a] = v
     return lista_m
 
 
@@ -240,7 +311,7 @@ def movBispo(tabuleiro, co, li, peca):
             if casa in aliados:
                 break
             if casa not in aliados:
-                lista_m.append("{},{}".format(a, co_d))
+                lista_m.append("{}{}".format(a, co_d))
                 if casa in oponente or co_d == LIMITE_CO_D:
                     break
         for b in range(li - 1, -1, -1):
@@ -251,7 +322,7 @@ def movBispo(tabuleiro, co, li, peca):
             if casa in aliados:
                 break
             if casa not in aliados:
-                lista_m.append("{},{}".format(b, co_e))
+                lista_m.append("{}{}".format(b, co_e))
                 if casa in oponente:
                     break
     if li != INDICE7:  # Essa condição é utilizada caso o bispo não esteja na linha 7 do tabuleiro
@@ -263,7 +334,7 @@ def movBispo(tabuleiro, co, li, peca):
             if casa in aliados:
                 break
             if casa not in aliados:
-                lista_m.append("{},{}".format(c, co_e_b))
+                lista_m.append("{}{}".format(c, co_e_b))
                 if casa in oponente:
                     break
         for d in range(li + 1, 7 + 1):
@@ -274,9 +345,18 @@ def movBispo(tabuleiro, co, li, peca):
             if casa in aliados:
                 break
             if casa not in aliados:
-                lista_m.append("{},{}".format(d, co_d_b))
+                lista_m.append("{}{}".format(d, co_d_b))
                 if casa in oponente:
                     break
+    num = len(lista_m)
+    for a in range(num):
+        lista_m[a] = list(lista_m[a])
+        lista_m[a][0] = str(int(lista_m[a][0]) + 1)
+        lista_m[a][1] = tradLet(int(lista_m[a][1]))
+        v = ""
+        for b in lista_m[a]:
+            v += b
+        lista_m[a] = v
     return lista_m
 
 
@@ -296,21 +376,30 @@ def movRei(tabuleiro, co, li, peca):
     elif peca == "RE_P":
         aliados = PECAS_P
     if li != INDICE7 and tabuleiro[li + 1][co] not in aliados:
-        lista_m.append("{},{}".format(li + 1, co))
+        lista_m.append("{}{}".format(li + 1, co))
     if li != INDICE0 and tabuleiro[li - 1][co] not in aliados:
-        lista_m.append("{},{}".format(li - 1, co))
+        lista_m.append("{}{}".format(li - 1, co))
     if co != INDICE7 and tabuleiro[li][co + 1] not in aliados:
-        lista_m.append("{},{}".format(li, co + 1))
+        lista_m.append("{}{}".format(li, co + 1))
     if co != INDICE0 and tabuleiro[li][co - 1] not in aliados:
-        lista_m.append("{},{}".format(li, co - 1))
+        lista_m.append("{}{}".format(li, co - 1))
     if li != INDICE7 and co != INDICE7 and tabuleiro[li + 1][co + 1] not in aliados:
-        lista_m.append("{},{}".format(li + 1, co + 1))
+        lista_m.append("{}{}".format(li + 1, co + 1))
     if li != INDICE7 and co != INDICE0 and tabuleiro[li + 1][co - 1] not in aliados:
-        lista_m.append("{},{}".format(li + 1, co - 1))
+        lista_m.append("{}{}".format(li + 1, co - 1))
     if li != INDICE0 and co != INDICE7 and tabuleiro[li - 1][co + 1] not in aliados:
-        lista_m.append("{},{}".format(li - 1, co + 1))
+        lista_m.append("{}{}".format(li - 1, co + 1))
     if li != INDICE0 and co != INDICE0 and tabuleiro[li - 1][co - 1] not in aliados:
-        lista_m.append("{},{}".format(li - 1, co - 1))
+        lista_m.append("{}{}".format(li - 1, co - 1))
+    num = len(lista_m)
+    for a in range(num):
+        lista_m[a] = list(lista_m[a])
+        lista_m[a][0] = str(int(lista_m[a][0]) + 1)
+        lista_m[a][1] = tradLet(int(lista_m[a][1]))
+        v = ""
+        for b in lista_m[a]:
+            v += b
+        lista_m[a] = v
     return lista_m
 
 
@@ -331,35 +420,44 @@ def movCavalo(tabuleiro, co, li, peca):
     if li + INDICE2 <= INDICE7 and co + INDICE1 <= INDICE7:
         if tabuleiro[li + INDICE2][co + INDICE1] in tabuleiro[li + INDICE2] and tabuleiro[li + INDICE2][
             co + INDICE1] not in aliados:
-            lista_m.append("{},{}".format(li + INDICE2, co + INDICE1))
+            lista_m.append("{}{}".format(li + INDICE2, co + INDICE1))
     if co - INDICE1 >= INDICE0 and li + INDICE2 <= INDICE7:
         if tabuleiro[li + INDICE2][co - INDICE1] in tabuleiro[li + INDICE2] and tabuleiro[li + INDICE2][
             co - INDICE1] not in aliados:
-            lista_m.append("{},{}".format(li + INDICE2, co - INDICE1))
+            lista_m.append("{}{}".format(li + INDICE2, co - INDICE1))
     if co - INDICE2 >= INDICE0 and li + INDICE1 <= INDICE7:
         if tabuleiro[li + INDICE1][co - INDICE2] in tabuleiro[li + INDICE1] and tabuleiro[li + INDICE1][
             co - INDICE2] not in aliados:
-            lista_m.append("{},{}".format(li + INDICE1, co - INDICE2))
+            lista_m.append("{}{}".format(li + INDICE1, co - INDICE2))
     if li + INDICE1 <= INDICE7 and co + INDICE2 <= INDICE7:
         if tabuleiro[li + INDICE1][co + INDICE2] in tabuleiro[li + INDICE1] and tabuleiro[li + INDICE1][
             co + INDICE2] not in aliados:
-            lista_m.append("{},{}".format(li + INDICE1, co + INDICE2))
+            lista_m.append("{}{}".format(li + INDICE1, co + INDICE2))
     if li - INDICE1 >= INDICE0 and co + INDICE2 <= INDICE7:
         if tabuleiro[li - INDICE1][co + INDICE2] in tabuleiro[li - INDICE1] and tabuleiro[li - INDICE1][
             co + INDICE2] not in aliados:
-            lista_m.append("{},{}".format(li - INDICE1, co + INDICE2))
+            lista_m.append("{}{}".format(li - INDICE1, co + INDICE2))
     if li - INDICE1 >= INDICE0 and co - INDICE2 >= INDICE0:
         if tabuleiro[li - INDICE1][co - INDICE2] in tabuleiro[li - INDICE1] and tabuleiro[li - INDICE1][
             co - INDICE2] not in aliados:
-            lista_m.append("{},{}".format(li - INDICE1, co - INDICE2))
+            lista_m.append("{}{}".format(li - INDICE1, co - INDICE2))
     if li - INDICE2 >= INDICE0 and co - INDICE1 >= INDICE0:
         if tabuleiro[li - INDICE2][co - INDICE1] in tabuleiro[li - INDICE2] and tabuleiro[li - INDICE2][
             co - INDICE1] not in aliados:
-            lista_m.append("{},{}".format(li - INDICE2, co - INDICE1))
+            lista_m.append("{}{}".format(li - INDICE2, co - INDICE1))
     if li - INDICE2 >= INDICE0 and co + INDICE1 <= INDICE7:
         if tabuleiro[li - INDICE2][co + INDICE1] in tabuleiro[li - INDICE2] and tabuleiro[li - INDICE2][
             co + INDICE1] not in aliados:
-            lista_m.append("{},{}".format(li - INDICE2, co + INDICE1))
+            lista_m.append("{}{}".format(li - INDICE2, co + INDICE1))
+    num = len(lista_m)
+    for a in range(num):
+        lista_m[a] = list(lista_m[a])
+        lista_m[a][0] = str(int(lista_m[a][0]) + 1)
+        lista_m[a][1] = tradLet(int(lista_m[a][1]))
+        v = ""
+        for b in lista_m[a]:
+            v += b
+        lista_m[a] = v
     return lista_m
 
 
@@ -390,6 +488,7 @@ def movimentos(tabuleiro, co, li, peca):
         b = movBispo(tabuleiro, co, li, peca)
         t = movTorre(tabuleiro, co, li, peca)
         s = (b + t)
+
         return s
     else:
         return peca_errada
@@ -397,7 +496,7 @@ def movimentos(tabuleiro, co, li, peca):
 
 def moverPecas(tabuleiro, peca, li_m, co_m, li, co):
     tabuleiro[li_m][co_m] = peca
-    tabuleiro[li][co] = "____"
+    tabuleiro[li][co] = "_"
     return tabuleiro
 
 
