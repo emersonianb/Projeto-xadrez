@@ -18,11 +18,11 @@ cont_tp_7 = 0
 cont_tp_0 = 0
 cont_rb = 0
 cont_rp = 0
-pos_re_b = "0,3"
-pos_re_p = "7,4"
+pos_re_b = "1d"
+pos_re_p = "8e"
 while True:
     # Imprime o tabuleiro
-    cont_t = 0
+    cont_t = 1
     print()
     print(colored(L_1_TAB, "yellow", attrs=['bold']))
     for a in tabuleiro:
@@ -32,21 +32,61 @@ while True:
             if indice != QTD_C - PONTO_P:
                 indice += PONTO_P
                 if b in PECAS_B:
-                    s = (colored(b, attrs=['bold']))
-                    print("{} |".format(s), end=" ")
+                    if b != "RE_B" and b != "RA_B":
+                        b = b[0]
+                        s = (colored(b, attrs=['bold']))
+                        print("{} |".format(s), end=" ")
+                    elif b == "RE_B":
+                        b = "K"
+                        s = (colored(b, attrs=['bold']))
+                        print("{} |".format(s), end=" ")
+                    elif b == "RA_B":
+                        b = "Q"
+                        s = (colored(b, attrs=['bold']))
+                        print("{} |".format(s), end=" ")
                 elif b in PECAS_P:
-                    s = (colored(b, "grey", attrs=['bold']))
-                    print("{} |".format(s), end=" ")
+                    if b != "RE_P" and b != "RA_P":
+                        b = b[0]
+                        s = (colored(b, "grey", attrs=['bold']))
+                        print("{} |".format(s), end=" ")
+                    elif b == "RE_P":
+                        b = "K"
+                        s = (colored(b, "grey", attrs=['bold']))
+                        print("{} |".format(s), end=" ")
+                    elif b == "RA_P":
+                        b = "Q"
+                        s = (colored(b, "grey", attrs=['bold']))
+                        print("{} |".format(s), end=" ")
                 else:
                     s = (colored(b, "white"))
                     print("{} |".format(s), end=" ")
             else:
                 if b in PECAS_B:
-                    s = (colored(b, attrs=['bold']))
-                    print(s)
+                    if b != "RE_B" and b != "RA_B":
+                        b = b[0]
+                        s = (colored(b, attrs=['bold']))
+                        print("{}".format(s))
+                    elif b == "RE_B":
+                        b = "K"
+                        s = (colored(b, attrs=['bold']))
+                        print("{}".format(s))
+                    elif b == "RA_B":
+                        b = "Q"
+                        s = (colored(b, attrs=['bold']))
+                        print("{}".format(s))
                 elif b in PECAS_P:
-                    s = (colored(b, "grey", attrs=['bold']))
-                    print(s)
+                    if b != "RE_P" and b != "RA_P":
+                        b = b[0]
+                        s = (colored(b, "grey", attrs=['bold']))
+                        print("{}".format(s))
+                    elif b == "RE_P":
+                        b = "K"
+                        s = (colored(b, "grey", attrs=['bold']))
+                        print("{}".format(s))
+                    elif b == "RA_P":
+                        b = "Q"
+                        s = (colored(b, "grey", attrs=['bold']))
+                        print("{}".format(s))
                 else:
                     s = (colored(b, "white"))
                     print(s)
@@ -87,7 +127,8 @@ while True:
                 print()
                 print(colored(m, "green", attrs=['bold']))
                 exit(0)
-            li, co = map(int, ent.split(","))
+            li = int(ent[0]) - INDICE1
+            co = tradLet(ent[1].lower())
             peca = tabuleiro[li][co]
             if peca == "RE_B" and cont_rb == 0:
                 if peca == "RE_B" and li == 0 and co == 3:
@@ -140,8 +181,9 @@ while True:
                     print((colored(s, "blue", attrs=['bold'])))
                     print()
                     while True:
-                        mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ").upper()
-                        li_m, co_m = map(int, mov.split(","))
+                        mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ").lower()
+                        li_m = int(mov[0]) - 1
+                        co_m = tradLet(mov[1])
                         l_m = tabuleiro[li_m][co_m]
                         if peca == "RE_B":
                             pos_re_b = mov
@@ -200,7 +242,8 @@ while True:
                 m = "O JOGADOR {} DESISTIU, SENDO ASSIM, O JOGADOR {} VENCEU".format(nome_jogador_p, nome_jogador_b)
                 print(colored(m, "green", attrs=['bold']))
                 exit(0)
-            li, co = map(int, ent.split(","))
+            li = int(ent[0]) - 1
+            co = tradLet(ent[1].lower())
             peca = tabuleiro[li][co]
             if peca == "RE_P" and cont_rp == 0:
                 if peca == "RE_P" and li == 7 and co == 4:
@@ -253,8 +296,9 @@ while True:
                     print((colored(s, "blue", attrs=['bold'])))
                     print()
                     while True:
-                        mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ")
-                        li_m, co_m = map(int, mov.split(","))
+                        mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ").lower()
+                        li_m = int(mov[0]) - 1
+                        co_m = tradLet(mov[1])
                         l_m = tabuleiro[li_m][co_m]
                         if l_m == "RE_B":
                             print()
