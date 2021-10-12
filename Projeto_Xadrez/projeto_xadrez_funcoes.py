@@ -9,6 +9,8 @@ from CONS import *
 
 lista_pec_b = []
 lista_pec_p = []
+lista_mov_b = []
+lista_mov_p = []
 
 
 def montar_tabuleiro():
@@ -36,8 +38,10 @@ def peoes_lugar(n1, peca):
         lista.append(("{}".format(peca)))
         if peca in PECAS_B:
             lista_pec_b.append(peca)
+            lista_mov_b.append("{}{}".format(INDICE1 + 1, tradLet(c)))
         else:
             lista_pec_p.append(peca)
+            lista_mov_p.append("{}{}".format(INDICE7, tradLet(c)))
     return lista
 
 
@@ -83,20 +87,28 @@ def posiciona_pecas():
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_TORRE_E, INDICE_TORRE_D, a)
                 lista_pec_b.append(a)
                 lista_pec_b.append(a)
+                lista_mov_b.append("{}{}".format(b + 1, tradLet(INDICE_TORRE_E)))
+                lista_mov_b.append("{}{}".format(b + 1, tradLet(INDICE_TORRE_D)))
             elif b == INDICE0 and a == "CA_B":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_CAVALO_E, INDICE_CAVALO_D, a)
                 lista_pec_b.append(a)
                 lista_pec_b.append(a)
+                lista_mov_b.append("{}{}".format(b + 1, tradLet(INDICE_CAVALO_E)))
+                lista_mov_b.append("{}{}".format(b + 1, tradLet(INDICE_CAVALO_D)))
             elif b == INDICE0 and a == "BI_B":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_BISPO_E, INDICE_BISPO_D, a)
                 lista_pec_b.append(a)
                 lista_pec_b.append(a)
+                lista_mov_b.append("{}{}".format(b + 1, tradLet(INDICE_BISPO_E)))
+                lista_mov_b.append("{}{}".format(b + 1, tradLet(INDICE_BISPO_D)))
             elif b == INDICE0 and a == "RA_B":
                 tabuleiro[b] = rei_rainha_lugar(tabuleiro, b, INDICE_REI, a)
                 lista_pec_b.append(a)
+                lista_mov_b.append("{}{}".format(b + 1, tradLet(INDICE_REI)))
             elif b == INDICE0 and a == "RE_B":
                 tabuleiro[b] = rei_rainha_lugar(tabuleiro, b, INDICE_RAINHA, a)
                 lista_pec_b.append(a)
+                lista_mov_b.append("{}{}".format(b + 1, tradLet(INDICE_RAINHA)))
     for a in PECAS_P:
         for b in range(len(tabuleiro)):
             if b == P2_PEAO and a == "PE_P":
@@ -105,20 +117,28 @@ def posiciona_pecas():
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_TORRE_E, INDICE_TORRE_D, a)
                 lista_pec_p.append(a)
                 lista_pec_p.append(a)
+                lista_mov_p.append("{}{}".format(b + 1, tradLet(INDICE_TORRE_E)))
+                lista_mov_p.append("{}{}".format(b + 1, tradLet(INDICE_TORRE_D)))
             elif b == INDICE7 and a == "CA_P":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_CAVALO_E, INDICE_CAVALO_D, a)
                 lista_pec_p.append(a)
                 lista_pec_p.append(a)
+                lista_mov_p.append("{}{}".format(b + 1, tradLet(INDICE_CAVALO_E)))
+                lista_mov_p.append("{}{}".format(b + 1, tradLet(INDICE_CAVALO_D)))
             elif b == INDICE7 and a == "BI_P":
                 tabuleiro[b] = pecas_lugar(tabuleiro, b, INDICE_BISPO_E, INDICE_BISPO_D, a)
                 lista_pec_p.append(a)
                 lista_pec_p.append(a)
+                lista_mov_p.append("{}{}".format(b + 1, tradLet(INDICE_BISPO_E)))
+                lista_mov_p.append("{}{}".format(b + 1, tradLet(INDICE_BISPO_D)))
             elif b == INDICE7 and a == "RE_P":
                 tabuleiro[b] = rei_rainha_lugar(tabuleiro, b, INDICE_REI, a)
                 lista_pec_p.append(a)
+                lista_mov_p.append("{}{}".format(b + 1, tradLet(INDICE_REI)))
             elif b == INDICE7 and a == "RA_P":
                 tabuleiro[b] = rei_rainha_lugar(tabuleiro, b, INDICE_RAINHA, a)
                 lista_pec_p.append(a)
+                lista_mov_p.append("{}{}".format(b + 1, tradLet(INDICE_RAINHA)))
     return tabuleiro
 
 
@@ -183,7 +203,7 @@ def movPeao(tabuleiro, co, li, peca):
     :return: Uma lista com as casas possiveis
     """
     lista_m = []
-    if peca == "PE_B":
+    if peca[INDICE3] == "B":
         if li == 1:
             lista_m.append("{}{}".format(LINHA_PEAO_2, co))
             lista_m.append("{}{}".format(LINHA_PEAO_3, co))
@@ -194,7 +214,7 @@ def movPeao(tabuleiro, co, li, peca):
         if co != 0 and tabuleiro[li + 1][co - 1] in PECAS_P:
             lista_m.append("{}{}".format(li + 1, co - 1))
 
-    if peca == "PE_P":
+    if peca[INDICE3] == "P":
         if li == 6:
             lista_m.append("{}{}".format(LINHA_PEAO_4, co))
             lista_m.append("{}{}".format(LINHA_PEAO_5, co))
@@ -371,9 +391,9 @@ def movRei(tabuleiro, co, li, peca):
     """
     aliados = []
     lista_m = []
-    if peca == "RE_B":
+    if peca[INDICE3] == "B":
         aliados = PECAS_B
-    elif peca == "RE_P":
+    elif peca[INDICE3] == "P":
         aliados = PECAS_P
     if li != INDICE7 and tabuleiro[li + 1][co] not in aliados:
         lista_m.append("{}{}".format(li + 1, co))
@@ -413,7 +433,7 @@ def movCavalo(tabuleiro, co, li, peca):
     :return: Uma lista com as casas possiveis
     """
     lista_m = []
-    if peca == "CA_B":
+    if peca[INDICE3] == "B":
         aliados = PECAS_B
     else:
         aliados = PECAS_P
@@ -494,10 +514,10 @@ def movimentos(tabuleiro, co, li, peca):
         return peca_errada
 
 
-def moverPecas(tabuleiro, peca, li_m, co_m, li, co):
-    tabuleiro[li_m][co_m] = peca
-    tabuleiro[li][co] = "_"
-    return tabuleiro
+def moverPecas(ta, peca, li_m, co_m, li, co):
+    ta[li_m][co_m] = peca
+    ta[li][co] = "_"
+    return ta
 
 
 def roqueCasV(tabuleiro, li, co, la):
@@ -532,13 +552,127 @@ def roqueMov(tabuleiro, li, co, la, re, to):
     return tabuleiro
 
 
-def indentificaCheque(tabuleiro, li_f, co_f, peca, pos_r):
-    cheque = False
-    lista = movimentos(tabuleiro, co_f, li_f, peca)
+def indentificaCheque(tabuleiro, pos_r, rei, lista_pecas_a, lista_m_a, lista_pecas_o, lista_m_o):
+    m = "MATE"
+    Mate = True
+    ch = "XEQUE"
+    cont_cheque = 0
+    li = int(pos_r[0]) - 1
+    co = tradLet((pos_r[1].lower()))
+    cor_o = ""
+    lista_cheques = []
+    if rei == "RE_B":
+        cor_o = "P"
+    elif rei == "RE_P":
+        cor_o = "B"
+    pos_p_o = descPos(lista_pecas_o, lista_m_o, "PE_{}".format(cor_o))
+    pos_t_o = descPos(lista_pecas_o, lista_m_o, "TO_{}".format(cor_o))
+    pos_b_o = descPos(lista_pecas_o, lista_m_o, "BI_{}".format(cor_o))
+    pos_ca_o = descPos(lista_pecas_o, lista_m_o, "CA_{}".format(cor_o))
+    pos_ra_o = descPos(lista_pecas_o, lista_m_o, "RA_{}".format(cor_o))
     try:
-        if pos_r in lista:
-            cheque = True
+        lista_pe = movPeao(tabuleiro, co, li, rei)
+        for mo in pos_p_o:
+            if mo in lista_pe:
+                cont_cheque += 1
+                lista_cheques += lista_pe
+        lista_to = movTorre(tabuleiro, co, li, rei)
+        for mo in pos_t_o:
+            if mo in lista_to:
+                cont_cheque += 1
+                lista_cheques += lista_to
+        for mo in pos_ra_o:
+            if mo in lista_to:
+                cont_cheque += 1
+                lista_cheques += lista_to
+        lista_bi = movBispo(tabuleiro, co, li, rei)
+        for mo in pos_b_o:
+            if mo in lista_bi:
+                cont_cheque += 1
+                lista_cheques += lista_bi
+        for mo in pos_ra_o:
+            if mo in lista_bi:
+                cont_cheque += 1
+                lista_cheques += lista_bi
+        lista_ca = movCavalo(tabuleiro, co, li, rei)
+        for mo in pos_ca_o:
+            if mo in lista_ca:
+                cont_cheque += 1
+                lista_cheques += lista_ca
+        lista_re = movRei(tabuleiro, co, li, rei)
+        cont_mate = 0
+        if cont_cheque >= 1:
+            for casa in lista_re:
+                if casa in lista_cheques:
+                    cont_mate += 1
+            for i in range(len(lista_pecas_a)):
+                pos = lista_m_a[i]
+                l = int(pos[0]) - 1
+                c = tradLet(pos[1])
+                peca = tabuleiro[l][c]
+                if peca != rei:
+                    lista_pec_m = movimentos(tabuleiro, c, l, lista_pecas_a[i])
+                    for mo in lista_pec_m:
+                        if mo in lista_cheques:
+                            Mate = False
+            tam = len(lista_re)
+            if cont_mate > 0 and cont_mate == tam and Mate:
+                return m
+            else:
+                return ch
     except TypeError:
         pass
-    return cheque
+
+
+def descPos(lista_p, lista_m, peca):
+    lista_s = []
+    for i in range(len(lista_p)):
+        if lista_p[i] == peca:
+            lista_s.append(lista_m[i])
+    return lista_s
+
+
+def removPecas(lista_p, lista_m, mov, l_m, cor):
+    t = "TO_{}".format(cor)
+    ca = "CA_{}".format(cor)
+    b = "BI_{}".format(cor)
+    pe = "PE_{}".format(cor)
+    ra = "RA_{}".format(cor)
+    if l_m == t:
+        lista_p.remove(l_m)
+        lista_m.remove(mov)
+    elif l_m == ca:
+        lista_p.remove(l_m)
+        lista_m.remove(mov)
+    elif l_m == b:
+        lista_p.remove(l_m)
+        lista_m.remove(mov)
+    elif l_m == pe:
+        lista_p.remove(l_m)
+        lista_m.remove(mov)
+    elif l_m == ra:
+        lista_p.remove(l_m)
+        lista_m.remove(mov)
+    return lista_p, lista_m
+
+
+def posPecas(lista_m, ent, mov):
+    i = lista_m.index(ent)
+    lista_m[i] = mov
+    return lista_m
+
+
+def promoPeao(lista_p, lista_m, mov, peca_pro, cor):
+    pe_p = ""
+    if peca_pro == "T":
+        pe_p = "TO_{}".format(cor)
+    elif peca_pro == "B":
+        pe_p = "BI_{}".format(cor)
+    elif peca_pro == "C":
+        pe_p = "CA_{}".format(cor)
+    elif peca_pro == "Q":
+        pe_p = "RA_{}".format(cor)
+    i_mov = lista_m.index(mov)
+    lista_p[i_mov] = pe_p
+    return pe_p, lista_p
 
