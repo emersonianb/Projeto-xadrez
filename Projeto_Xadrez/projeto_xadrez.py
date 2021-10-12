@@ -101,28 +101,27 @@ while True:
         # selecionar outra peça
         while True:
             if cont > 1:
-                cheque = indentificaCheque(tabuleiro, pos_re_b, "RE_B", lista_pec_b, lista_mov_b, lista_pec_p,
-                                           lista_mov_p)
+                cheque = indentificaCheque(tabuleiro, pos_re_b, "RE_B", lista_pec_b, lista_mov_b, lista_pec_p, lista_mov_p)
                 if cheque == "XEQUE":
-                    print()
                     print(colored("SEU REI ESTÁ EM XEQUE. CUIDADO!", "red", attrs=['bold']))
                     print()
                     while True:
-                        li, co = input("QUE PEÇA VOCÊ DESEJA MOVER? ").split()
-                        li = int(li) - 1
-                        co = tradLet(int(co))
+                        ent = input("QUE PEÇA VOCÊ DESEJA MOVER? ")
+                        li = int(ent[0]) - 1
+                        co = tradLet(ent[1].lower())
                         peca = tabuleiro[li][co]
                         if peca in PECAS_B:
                             lista_m = movimentos(tabuleiro, co, li, peca)
                             print(lista_m)
-                            mov = input("PARA QUAL CASA VOCÊ DESEJA MOVER? ")
-                            li_m = int(li) - 1
-                            co_m = tradLet(int(co))
+                            mov = input("PARA QUAL CASA VOCÊ DESEJA MOVER? ").lower()
+                            li_m = int(mov[0]) - 1
+                            co_m = tradLet(mov[1])
+                            l_m = tabuleiro[li_m][co_m]
                             if mov in lista_m:
                                 if peca == "RE_B":
+                                    tabuleiro_t = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
                                     pos_t_r = pos_re_b
-                                    cheque = indentificaCheque(tabuleiro, pos_re_b, "RE_B", lista_pec_b, lista_mov_b,
-                                                               lista_pec_p, lista_mov_p)
+                                    cheque = indentificaCheque(tabuleiro_t, pos_re_b, "RE_B", lista_pec_b, lista_mov_b, lista_pec_p, lista_mov_p)
                                     if cheque == "XEQUE":
                                         pass
                                     elif cheque == "MATE":
@@ -131,21 +130,26 @@ while True:
                                     else:
                                         pos_re_b = mov
                                         tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                                        lista_mov_b = posPecas(lista_mov_b, ent.lower(), mov)
+                                        if l_m in PECAS_B:
+                                            lista_pec_b, lista_mov_b = removPecas(lista_pec_b, lista_mov_b, mov, l_m, "B")
                                         break
                                 else:
-                                    cheque = indentificaCheque(tabuleiro, pos_re_b, "RE_B", lista_pec_b, lista_mov_b,
-                                                               lista_pec_p, lista_mov_p)
+                                    tabuleiro_temp = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                                    cheque = indentificaCheque(tabuleiro_temp, pos_re_b, "RE_B", lista_pec_b, lista_mov_b, lista_pec_p, lista_mov_p)
                                     if cheque == "XEQUE":
                                         pass
                                     elif cheque == "MATE":
                                         print(colored("XEQUE MATE, SEU ADVERSÁRIO VENCEU O JOGO!", "yellow"))
                                         exit(0)
                                     else:
-                                        pos_re_b = mov
                                         tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                                        lista_mov_b = posPecas(lista_mov_b, ent.lower(), mov)
+                                        if l_m in PECAS_B:
+                                            lista_pec_b, lista_mov_b = removPecas(lista_pec_b, lista_mov_b, mov, l_m, "B")
                                         break
                             else:
-                                print(colored("JOGADA INVÁLIDA"), "red")
+                                print(colored("JOGADA INVÁLIDA", "red"))
                     break
                 elif cheque == "MATE":
                     print(colored("XEQUE MATE, SEU ADVERSÁRIO VENCEU O JOGO!", "yellow"))
@@ -230,7 +234,7 @@ while True:
                                     "green"))
                                 print(colored("T, B, C, Q", "green"))
                                 peca_pro = input().upper()
-                                peca_pro, lista_pec_p = promoPeao(lista_pec_b, lista_mov_b, mov, peca_pro, "B")
+                                peca_pro, lista_pec_b = promoPeao(lista_pec_b, lista_mov_b, mov, peca_pro, "B")
                                 tabuleiro = moverPecas(tabuleiro, peca_pro, li_m, co_m, li, co)
                             else:
                                 tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
@@ -263,28 +267,27 @@ while True:
         print("VEZ DO(A) JOGADOR(A) {}\n".format(nome_jogador_p))
         while True:
             if cont > 1:
-                cheque = indentificaCheque(tabuleiro, pos_re_p, "RE_P", lista_pec_p, lista_mov_p, lista_pec_b,
-                                           lista_mov_b)
+                cheque = indentificaCheque(tabuleiro, pos_re_p, "RE_P", lista_pec_p, lista_mov_p, lista_pec_b, lista_mov_b)
                 if cheque == "XEQUE":
-                    print()
-                    print(colored("SEU REI ESTÁ EM XEQUE. CUIDADO!", "red", attrs=['bold']))
+                    print(colored("SEU REI ESTÁ EM XEQUE, CUIDADO!", "red", attrs=['bold']))
                     print()
                     while True:
-                        li, co = input("QUE PEÇA VOCÊ DESEJA MOVER? ").split()
-                        li = int(li) - 1
-                        co = tradLet(int(co))
+                        ent = input("QUE PEÇA VOCÊ DESEJA MOVER? ")
+                        li = int(ent[0]) - 1
+                        co = tradLet(ent[1].lower())
                         peca = tabuleiro[li][co]
                         if peca in PECAS_P:
                             lista_m = movimentos(tabuleiro, co, li, peca)
                             print(lista_m)
-                            mov = input("PARA QUAL CASA VOCÊ DESEJA MOVER? ")
-                            li_m = int(li) - 1
-                            co_m = tradLet(int(co))
+                            mov = input("PARA QUAL CASA VOCÊ DESEJA MOVER? ").lower()
+                            li_m = int(mov[0]) - 1
+                            co_m = tradLet(mov[1])
+                            l_m = tabuleiro[li_m][co_m]
                             if mov in lista_m:
                                 if peca == "RE_B":
+                                    tabuleiro_t = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
                                     pos_t_r = pos_re_p
-                                    cheque = indentificaCheque(tabuleiro, pos_re_p, "RE_P", lista_pec_p, lista_mov_p,
-                                                               lista_pec_b, lista_mov_b)
+                                    cheque = indentificaCheque(tabuleiro_t, pos_re_p, "RE_P", lista_pec_p, lista_mov_p, lista_pec_b, lista_mov_b)
                                     if cheque == "XEQUE":
                                         pass
                                     elif cheque == "MATE":
@@ -293,21 +296,26 @@ while True:
                                     else:
                                         pos_re_p = mov
                                         tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                                        lista_mov_p = posPecas(lista_mov_p, ent.lower(), mov)
+                                        if l_m in PECAS_B:
+                                            lista_pec_b, lista_mov_b = removPecas(lista_pec_b, lista_mov_b, mov, l_m, "B")
                                         break
                                 else:
-                                    cheque = indentificaCheque(tabuleiro, pos_re_p, "RE_P", lista_pec_p, lista_mov_p,
-                                                               lista_pec_b, lista_mov_b)
+                                    tabuleiro_t = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                                    cheque = indentificaCheque(tabuleiro_t, pos_re_p, "RE_P", lista_pec_p, lista_mov_p, lista_pec_b, lista_mov_b)
                                     if cheque == "XEQUE":
                                         pass
                                     elif cheque == "MATE":
                                         print(colored("XEQUE MATE, SEU ADVERSÁRIO VENCEU O JOGO!", "yellow"))
                                         exit(0)
                                     else:
-                                        pos_re_p = mov
                                         tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                                        lista_mov_p = posPecas(lista_mov_p, ent.lower(), mov)
+                                        if l_m in PECAS_B:
+                                            lista_pec_b, lista_mov_b = removPecas(lista_pec_b, lista_mov_b, mov, l_m, "B")
                                         break
                             else:
-                                print(colored("JOGADA INVÁLIDA"), "red")
+                                print(colored("JOGADA INVÁLIDA", "red"))
                     break
                 elif cheque == "MATE":
                     print(colored("XEQUE MATE, SEU ADVERSÁRIO VENCEU O JOGO!", "yellow"))
@@ -376,6 +384,8 @@ while True:
                         li_m = int(mov[0]) - 1
                         co_m = tradLet(mov[1])
                         l_m = tabuleiro[li_m][co_m]
+                        if peca == "RE_P":
+                            pos_re_b = mov
                         if l_m == "RE_B":
                             print()
                             s = "REI BRANCO CAPTURADO! O(A) JOGADOR(A) {} É O(A) VENCEDOR(A)!".format(
