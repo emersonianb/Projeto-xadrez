@@ -212,7 +212,8 @@ def movPeao(tabuleiro, co, li, peca):
         if li == INDICE1:
             lista_m.append("{}{}".format(LINHA_PEAO_2, co))
             lista_m.append("{}{}".format(LINHA_PEAO_3, co))
-        elif li != INDICE7 and tabuleiro[li + INDICE1][co] not in PECAS_P and tabuleiro[li + INDICE1][co] not in PECAS_B:
+        elif li != INDICE7 and tabuleiro[li + INDICE1][co] not in PECAS_P and tabuleiro[li + INDICE1][
+            co] not in PECAS_B:
             lista_m.append("{}{}".format(li + INDICE1, co))
         if li != INDICE7 and co != INDICE7 and tabuleiro[li + INDICE1][co + INDICE1] in PECAS_P:
             lista_m.append("{}{}".format(li + INDICE1, co + INDICE1))
@@ -223,7 +224,8 @@ def movPeao(tabuleiro, co, li, peca):
         if li == 6:
             lista_m.append("{}{}".format(LINHA_PEAO_4, co))
             lista_m.append("{}{}".format(LINHA_PEAO_5, co))
-        elif li != INDICE0 and tabuleiro[li - INDICE1][co] not in PECAS_P and tabuleiro[li - INDICE1][co] not in PECAS_B:
+        elif li != INDICE0 and tabuleiro[li - INDICE1][co] not in PECAS_P and tabuleiro[li - INDICE1][
+            co] not in PECAS_B:
             lista_m.append("{}{}".format(li - INDICE1, co))
         if li != INDICE0 and co != INDICE7 and tabuleiro[li - INDICE1][co + INDICE1] in PECAS_B:
             lista_m.append("{}{}".format(li - INDICE1, co + INDICE1))
@@ -744,15 +746,15 @@ def descPos(lista_p, lista_m, peca):
     return lista_s
 
 
-def removPecas(lista_p, lista_m, mov, l_m, cor):
+def removPecas(lista_p, lista_m, mov, peca, cor):
     """
     Esta função remove as peças das listas de movimento e peças com base no indice do mov na lista
     :param lista_p: Lista de peças aliadas
     :param lista_m: Lista de posições das peças
-    :param mov:
-    :param l_m:
-    :param cor:
-    :return:
+    :param mov: A posição
+    :param peca: A peça
+    :param cor: A cor da peça
+    :return: A lista de peças e a lista de movimentos atualizada
     """
     t = "TO_{}".format(cor)
     ca = "CA_{}".format(cor)
@@ -760,19 +762,19 @@ def removPecas(lista_p, lista_m, mov, l_m, cor):
     pe = "PE_{}".format(cor)
     ra = "RA_{}".format(cor)
     i = lista_m.index(mov)
-    if l_m == t:
+    if peca == t:
         lista_p.pop(i)
         lista_m.pop(i)
-    elif l_m == ca:
+    elif peca == ca:
         lista_p.pop(i)
         lista_m.pop(i)
-    elif l_m == b:
+    elif peca == b:
         lista_p.pop(i)
         lista_m.pop(i)
-    elif l_m == pe:
+    elif peca == pe:
         lista_p.pop(i)
         lista_m.pop(i)
-    elif l_m == ra:
+    elif peca == ra:
         lista_p.pop(i)
         lista_m.pop(i)
     return lista_p, lista_m
