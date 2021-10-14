@@ -3,7 +3,6 @@ from projeto_xadrez_funcoes import *
 from CONS import *
 from termcolor import colored
 
-
 print("|SEJA MUITO BEM-VINDO AO NOSSO PYDREZ|".center(INDICE120, "_"))
 print("(uma piadinha com python + xadrez)".center(INDICE120, " "))
 print()
@@ -194,21 +193,29 @@ while True:
                         try:
                             ent = input("EM QUE CASA ESTÁ LOCALIZADA A PEÇA QUE VOCÊ DESEJA MOVER? ").upper()
                             if ent == "DESISTIR":
-                                m = "O JOGADOR {} DESISTIU, SENDO ASSIM, O JOGADOR {} VENCEU".format(nome_jogador_p, nome_jogador_b)
+                                m = "O JOGADOR {} DESISTIU, SENDO ASSIM, O JOGADOR {} VENCEU".format(nome_jogador_p,
+                                                                                                     nome_jogador_b)
                                 print()
                                 print(colored(m, "green", attrs=['bold']))
                                 exit(INDICE0)
                             li = int(ent[INDICE0]) - INDICE1
                             co = tradLet(ent[INDICE1].lower())
                             peca = tabuleiro[li][co]
-                            if peca in PECAS_P:
+                            lista_s = movimentos(tabuleiro, co, li, peca)
+                            if li > INDICE7 or co > INDICE7 or li < INDICE0 or co < INDICE0:
+                                print((colored("ESSA CASA NÃO ESTA CONTIDA NO TABULEIRO", "red")))
+                            elif peca in PECAS_P:
                                 print(colored("ESSA PEÇA É DO SEU ADVERSÁRIO. ESCOLHA UMA ALIADA.", "red"))
                             elif peca not in PECAS_B:
                                 print(colored("NÃO HÁ NENHUMA PEÇA NESSA CASA. SELECIONA OUTRA.", "red"))
+                            elif lista_s == []:
+                                print(colored("ESSA PEÇA NÃO PODE SE MOVER, SELECIONE OUTRA.", "red"))
+                            elif lista_s is True:
+                                print(colored("ESSA PEÇA NÃO FOI ENCONTRADA", "red"))
                             else:
                                 break
                         except (TypeError, IndexError, ValueError):
-                            print("JOGADA INVÁLIDA!")
+                            print(colored("JOGADA INVÁLIDA!", "red"))
                             pass
                     if peca == "RE_B":
                         # Verifica se, ao selecionar o rei, é possível fazer o roque com alguma das duas torres
@@ -291,7 +298,13 @@ while True:
                             if peca == "PE_B" and li_m == INDICE7:
                                 print(colored("SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ", "green"))
                                 print(colored("T, B, C, Q", "green"))
-                                peca_pro = input().upper()
+                                peca_pro = ""
+                                while True:
+                                    peca_pro = input().upper()
+                                    if peca_pro == "T" or peca_pro == "B" or peca_pro == "C" or peca_pro == "Q":
+                                        break
+                                    else:
+                                        print(colored("PEÇA INVÁLIDA", "red"))
                                 peca_pro, lista_pec_b = promoPeao(lista_pec_b, lista_mov_b, mov, peca_pro, "B")
                             tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
                             lista_mov_b = posPecas(lista_mov_b, ent.lower(), mov)
@@ -314,7 +327,9 @@ while True:
                     co = tradLet(ent[INDICE1].lower())
                     peca = tabuleiro[li][co]
                     lista_s = movimentos(tabuleiro, co, li, peca)
-                    if peca in PECAS_P:
+                    if li > INDICE7 or co > INDICE7 or li < INDICE0 or co < INDICE0:
+                        print((colored("ESSA CASA NÃO ESTA CONTIDA NO TABULEIRO", "red")))
+                    elif peca in PECAS_P:
                         print(colored("ESSA PEÇA É DO SEU ADVERSÁRIO. ESCOLHA UMA ALIADA.", "red"))
                     elif peca not in PECAS_B:
                         print(colored("NÃO HÁ NENHUMA PEÇA NESSA CASA. SELECIONA OUTRA.", "red"))
@@ -325,7 +340,7 @@ while True:
                     else:
                         break
                 except (TypeError, IndexError, ValueError):
-                    print("JOGADA INVÁLIDA!")
+                    print(colored("JOGADA INVÁLIDA!", "red"))
             to_e, to_d = roqueCond(tabuleiro, "RE_B", cont_rb, cont_tb_0, cont_tb_7, li, co)
             if to_e is True and to_d is True:
                 faz_ro = input("VOCÊ GOSTARIA DE FAZER O ROQUE? ").upper()
@@ -355,47 +370,49 @@ while True:
             elif li == INDICE0 and co == INDICE3:  # Rei branco
                 cont_rb += INDICE1
 
-            lista_s = movimentos(tabuleiro, co, li, peca)
-            if li > INDICE7 or co > INDICE7 or li < INDICE0 or co < INDICE0:
-                print((colored("ESSA CASA NÃO ESTA CONTIDA NO TABULEIRO", "red")))
-            elif lista_s:
-                s = "ESSAS SÃO SUAS OPÇÕES DE MOVIMENTO\n{}".format(lista_s)
-                print((colored(s, "blue")))
-                print()
-                while True:
-                    try:
-                        mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ").lower()
-                        li_m = int(mov[INDICE0]) - INDICE1
-                        co_m = tradLet(mov[INDICE1])
-                        l_m = tabuleiro[li_m][co_m]
-                        if mov not in lista_s:
-                            print(colored("A CASA SELECIONADA NÃO PODE SER ESCOLHIDA", "red"))
-                        else:
-                            break
-                    except (TypeError, IndexError, ValueError):
-                        print("JOGADA INVÁLIDA!")
-                        pass
-                lista_mov_b = posPecas(lista_mov_b, ent.lower(), mov)
-                if peca == "RE_B":
-                    pos_re_b = mov  # Atualiza a posição do rei sempre que ele se move
-                if l_m == "RE_P":
-                    print()
-                    print("REI PRETO CAPTURADO! O(A) JOGADOR(A) {} É O(A) VENCEDOR(A)!".format(nome_jogador_b))
-                    exit(INDICE0)
-                elif mov in lista_s:
-                    if peca == "PE_B" and li_m == INDICE7:
-                        print(colored(
-                            "SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ", "green"))
-                        print(colored("T, B, C, Q", "green"))
-                        peca_pro = input().upper()
-                        peca_pro, lista_pec_b = promoPeao(lista_pec_b, lista_mov_b, mov, peca_pro, "B")
-                        tabuleiro = moverPecas(tabuleiro, peca_pro, li_m, co_m, li, co)
-                    elif l_m in PECAS_P:
-                        lista_pec_p, lista_mov_p = removPecas(lista_pec_p, lista_mov_p, mov, l_m, "P")
-                        tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+            s = "ESSAS SÃO SUAS OPÇÕES DE MOVIMENTO\n{}".format(lista_s)
+            print((colored(s, "blue")))
+            print()
+            while True:
+                try:
+                    mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ").lower()
+                    li_m = int(mov[INDICE0]) - INDICE1
+                    co_m = tradLet(mov[INDICE1])
+                    l_m = tabuleiro[li_m][co_m]
+                    if mov not in lista_s:
+                        print(colored("A CASA SELECIONADA NÃO PODE SER ESCOLHIDA", "red"))
                     else:
-                        tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
-                    break
+                        break
+                except (TypeError, IndexError, ValueError):
+                    print(colored("JOGADA INVÁLIDA!", "red"))
+                    pass
+            lista_mov_b = posPecas(lista_mov_b, ent.lower(), mov)
+            if peca == "RE_B":
+                pos_re_b = mov  # Atualiza a posição do rei sempre que ele se move
+            if l_m == "RE_P":
+                print()
+                print("REI PRETO CAPTURADO! O(A) JOGADOR(A) {} É O(A) VENCEDOR(A)!".format(nome_jogador_b))
+                exit(INDICE0)
+            elif mov in lista_s:
+                if peca == "PE_B" and li_m == INDICE7:
+                    print(colored(
+                        "SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ", "green"))
+                    print(colored("T, B, C, Q", "green"))
+                    peca_pro = ""
+                    while True:
+                        peca_pro = input().upper()
+                        if peca_pro == "T" or peca_pro == "B" or peca_pro == "C" or peca_pro == "Q":
+                            break
+                        else:
+                            print(colored("PEÇA INVÁLIDA", "red"))
+                    peca_pro, lista_pec_b = promoPeao(lista_pec_b, lista_mov_b, mov, peca_pro, "B")
+                    tabuleiro = moverPecas(tabuleiro, peca_pro, li_m, co_m, li, co)
+                elif l_m in PECAS_P:
+                    lista_pec_p, lista_mov_p = removPecas(lista_pec_p, lista_mov_p, mov, l_m, "P")
+                    tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                else:
+                    tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                break
     else:
         li = INDICE0
         co = INDICE0
@@ -424,14 +441,22 @@ while True:
                             li = int(ent[INDICE0]) - INDICE1
                             co = tradLet(ent[INDICE1].lower())
                             peca = tabuleiro[li][co]
-                            if peca in PECAS_B:
+                            lista_s = movimentos(tabuleiro, co, li, peca)
+                            if li > INDICE7 or co > INDICE7 or li < INDICE0 or co < INDICE0:
+                                print((colored("ESSA CASA NÃO ESTA CONTIDA NO TABULEIRO", "red")))
+                            elif peca in PECAS_B:
                                 print(colored("ESSA PEÇA É DO SEU ADVERSÁRIO. ESCOLHA UMA ALIADA.", "red"))
                             elif peca not in PECAS_P:
                                 print(colored("NÃO HÁ NENHUMA PEÇA NESSA CASA. SELECIONA OUTRA.", "red"))
+                            elif lista_s == []:
+                                print(colored("ESSA PEÇA NÃO PODE SE MOVER, SELECIONE OUTRA.", "red"))
+                                print()
+                            elif lista_s is True:
+                                print(colored("ESSA PEÇA NÃO FOI ENCONTRADA", "red"))
                             else:
                                 break
                         except (TypeError, IndexError, ValueError):
-                            print("JOGADA INVÁLIDA!")
+                            print(colored("JOGADA INVÁLIDA!", "red"))
                             pass
                     if peca == "RE_P":
                         to_e, to_d = roqueCond(tabuleiro, "RE_P", cont_rp, cont_tp_0, cont_tp_7, li, co)
@@ -478,7 +503,7 @@ while True:
                             else:
                                 break
                         except (TypeError, IndexError, ValueError):
-                            print("JOGADA INVÁLIDA!")
+                            print(colored("JOGADA INVÁLIDA!", "red"))
                             pass
                     if peca == "RE_P":
                         # Gera uma deepcopy do tabuleiro, a qual serve para analisar as condições de xeque
@@ -514,7 +539,13 @@ while True:
                             if peca == "PE_P" and li_m == INDICE0:
                                 print(colored("SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ", "green"))
                                 print(colored("T, B, C, Q", "green"))
-                                peca_pro = input().upper()
+                                peca_pro = ""
+                                while True:
+                                    peca_pro = input().upper()
+                                    if peca_pro == "T" or peca_pro == "B" or peca_pro == "C" or peca_pro == "Q":
+                                        break
+                                    else:
+                                        print(colored("PEÇA INVÁLIDA", "red"))
                                 peca_pro, lista_pec_p = promoPeao(lista_pec_p, lista_mov_p, mov, peca_pro, "P")
                             tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
                             lista_mov_p = posPecas(lista_mov_p, ent.lower(), mov)
@@ -536,7 +567,9 @@ while True:
                     co = tradLet(ent[INDICE1].lower())
                     peca = tabuleiro[li][co]
                     lista_s = movimentos(tabuleiro, co, li, peca)
-                    if peca in PECAS_B:
+                    if li > INDICE7 or co > INDICE7 or li < INDICE0 or co < INDICE0:
+                        print((colored("ESSA CASA NÃO ESTA CONTIDA NO TABULEIRO", "red")))
+                    elif peca in PECAS_B:
                         print(colored("ESSA PEÇA É DO SEU ADVERSÁRIO. ESCOLHA UMA ALIADA.", "red"))
                     elif peca not in PECAS_P:
                         print(colored("NÃO HÁ NENHUMA PEÇA NESSA CASA. SELECIONA OUTRA.", "red"))
@@ -548,7 +581,7 @@ while True:
                     else:
                         break
                 except (TypeError, IndexError, ValueError):
-                    print("JOGADA INVÁLIDA!")
+                    print(colored("JOGADA INVÁLIDA!", "red"))
                     pass
             to_e, to_d = roqueCond(tabuleiro, "RE_P", cont_rp, cont_tp_0, cont_tp_7, li, co)
             if to_e is True and to_d is True:
@@ -579,47 +612,50 @@ while True:
             elif li == INDICE7 and co == INDICE4:  # Rei preto
                 cont_rp += INDICE1
 
-            if li > INDICE7 or co > INDICE7 or li < INDICE0 or co < INDICE0:
-                print((colored("ESSA CASA NÃO ESTA CONTIDA NO TABULEIRO", "red")))
-            elif lista_s:
-                s = "ESSAS SÃO SUAS OPÇÕES DE MOVIMENTO\n{}".format(lista_s)
-                print((colored(s, "blue")))
-                print()
-                while True:
-                    try:
-                        mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ").lower()
-                        li_m = int(mov[INDICE0]) - INDICE1
-                        co_m = tradLet(mov[INDICE1])
-                        l_m = tabuleiro[li_m][co_m]
-                        if mov not in lista_s:
-                            print(colored("A CASA SELECIONADA NÃO PODE SER ESCOLHIDA", "red"))
-                        else:
-                            break
-                    except (TypeError, IndexError, ValueError):
-                        print("JOGADA INVÁLIDA!")
-                        pass
-                lista_mov_p = posPecas(lista_mov_p, ent.lower(), mov)
-                if peca == "RE_P":
-                    pos_re_p = mov  # Atualiza a posição do rei sempre que ele se move
-                if l_m == "RE_B":
-                    print()
-                    s = "REI BRANCO CAPTURADO! O(A) JOGADOR(A) {} É O(A) VENCEDOR(A)!".format(
-                        nome_jogador_p)
-                    print(colored(s, "blue", attrs=['bold']))
-                    exit(INDICE0)
-                elif mov in lista_s:
-                    if peca == "PE_P" and li_m == INDICE0:
-                        print(colored("SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ", "green"))
-                        print(colored("T, B, C, Q", "green"))
-                        peca_pro = input().upper()
-                        peca_pro, lista_pec_p = promoPeao(lista_pec_p, lista_mov_p, mov, peca_pro, "P")
-                        tabuleiro = moverPecas(tabuleiro, peca_pro, li_m, co_m, li, co)
-                    elif l_m in PECAS_B:
-                        lista_pec_b, lista_mov_b = removPecas(lista_pec_b, lista_mov_b, mov, l_m, "B")
-                        tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+            s = "ESSAS SÃO SUAS OPÇÕES DE MOVIMENTO\n{}".format(lista_s)
+            print((colored(s, "blue")))
+            print()
+            while True:
+                try:
+                    mov = input("PARA QUAL DESSAS CASAS VOCÊ DESEJA MOVER A PEÇA? ").lower()
+                    li_m = int(mov[INDICE0]) - INDICE1
+                    co_m = tradLet(mov[INDICE1])
+                    l_m = tabuleiro[li_m][co_m]
+                    if mov not in lista_s:
+                        print(colored("A CASA SELECIONADA NÃO PODE SER ESCOLHIDA", "red"))
                     else:
-                        tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
-                    break
+                        break
+                except (TypeError, IndexError, ValueError):
+                    print(colored("JOGADA INVÁLIDA!", "red"))
+                    pass
+            lista_mov_p = posPecas(lista_mov_p, ent.lower(), mov)
+            if peca == "RE_P":
+                pos_re_p = mov  # Atualiza a posição do rei sempre que ele se move
+            if l_m == "RE_B":
+                print()
+                s = "REI BRANCO CAPTURADO! O(A) JOGADOR(A) {} É O(A) VENCEDOR(A)!".format(
+                    nome_jogador_p)
+                print(colored(s, "blue", attrs=['bold']))
+                exit(INDICE0)
+            elif mov in lista_s:
+                if peca == "PE_P" and li_m == INDICE0:
+                    print(colored("SEU PEÃO FOI PROMOVIDO, ESCOLHA A PEÇA NA QUAL ELE SERÁ TRANSFORMADO: ", "green"))
+                    print(colored("T, B, C, Q", "green"))
+                    peca_pro = ""
+                    while True:
+                        peca_pro = input().upper()
+                        if peca_pro == "T" or peca_pro == "B" or peca_pro == "C" or peca_pro == "Q":
+                            break
+                        else:
+                            print(colored("PEÇA INVÁLIDA", "red"))
+                    peca_pro, lista_pec_p = promoPeao(lista_pec_p, lista_mov_p, mov, peca_pro, "P")
+                    tabuleiro = moverPecas(tabuleiro, peca_pro, li_m, co_m, li, co)
+                elif l_m in PECAS_B:
+                    lista_pec_b, lista_mov_b = removPecas(lista_pec_b, lista_mov_b, mov, l_m, "B")
+                    tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                else:
+                    tabuleiro = moverPecas(tabuleiro, peca, li_m, co_m, li, co)
+                break
     # Casos de empate
     cont_g_b = len(lista_pec_b)  # Contador do total de peças brancas
     cont_g_p = len(lista_pec_p)  # Contador do total de peças pretas
