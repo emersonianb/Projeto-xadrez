@@ -1,2 +1,2 @@
 # Projeto-xadrez
-Projeto de Xadrez para a disciplina de Algoritmo e Programação
+Projeto de Xadrez em python, realizado para a disciplina de Algoritmo e Programação.
